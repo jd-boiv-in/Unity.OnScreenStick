@@ -133,7 +133,8 @@ namespace EnhancedOnScreenControls
                 }
             }
 
-            handle.rectTransform.anchoredPosition = Vector2.Lerp(handle.rectTransform.anchoredPosition, _desiredHandle, 1f - Mathf.Pow(LerpFactor, deltaTime));
+            if (_alpha > 0f)
+                handle.rectTransform.anchoredPosition = Vector2.Lerp(handle.rectTransform.anchoredPosition, _desiredHandle, 1f - Mathf.Pow(LerpFactor, deltaTime));
         }
 
         public void OnPointerDown(PointerEventData eventData)

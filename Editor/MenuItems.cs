@@ -7,7 +7,7 @@ namespace EnhancedOnScreenControls.Editor
 {
     static class MenuItems
     {
-        [MenuItem("GameObject/Enhanced On-Screen Controls/On-Screen Stick")]
+        [MenuItem("GameObject/UI/Enhanced On-Screen Controls/On-Screen Stick")]
         public static void CreateOnScreenStick()
         {
             var path = "Packages/com.annulusgames.enhanced-on-screen-stick/Runtime/Prefabs/Enhanced On-Screen Stick.prefab";
