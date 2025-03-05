@@ -25,7 +25,7 @@ Enhanced On-Screen Stick is a library that provides a highly functional virtual 
 3. Enter the following URL:
 
 ```
-https://github.com/AnnulusGames/EnhancedOnScreenStick.git?path=Assets/EnhancedOnScreenStick
+https://github.com/starburst997/Unity.OnScreenStick.git
 ```
 
 Alternatively, open Packages/manifest.json and add the following to the dependencies block:
