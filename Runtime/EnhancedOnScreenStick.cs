@@ -77,12 +77,14 @@ namespace EnhancedOnScreenControls
         private float _delay = 0f;
         private bool _show;
 
+        private Camera _camera;
         private Vector2 _desiredHandle;
         
         protected void Awake()
         {
             rectTransform = (RectTransform)transform;
             canvas = GetComponentInParent<Canvas>();
+            _camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
 
             if (showOnlyWhenPressed)
             {
@@ -141,9 +143,8 @@ namespace EnhancedOnScreenControls
 
             if (stickType != StickType.Fixed)
             {
-                var camera = canvas.worldCamera;
                 var pos = new Vector2(eventData.position.x, eventData.position.y);
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(background.rectTransform, eventData.position, camera, out var localPoint);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(background.rectTransform, eventData.position, _camera, out var localPoint);
                 bool inside = (localPoint.x > -background.rectTransform.sizeDelta.x / 2f) &&
                               (localPoint.x <  background.rectTransform.sizeDelta.x / 2f) && 
                               (localPoint.y > -background.rectTransform.sizeDelta.y / 2f) &&
@@ -181,9 +182,7 @@ namespace EnhancedOnScreenControls
 
         public void OnDrag(PointerEventData eventData)
         {
-            var camera = canvas.worldCamera;
-            var position = RectTransformUtility.WorldToScreenPoint(camera, background.rectTransform.position);
-
+            var position = RectTransformUtility.WorldToScreenPoint(_camera, background.rectTransform.position);
             var input = (eventData.position - position) / (movementRange * canvas.scaleFactor) * EnabledAxis();
             var rawMagnitude = input.magnitude;
             var normalized = input.normalized;
@@ -204,8 +203,7 @@ namespace EnhancedOnScreenControls
 
         Vector2 ScreenToAnchoredPosition(Vector2 screenPosition)
         {
-            var camera = canvas.worldCamera;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPosition, camera, out var localPoint))
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPosition, _camera, out var localPoint))
             {
                 var pivotOffset = rectTransform.pivot * rectTransform.sizeDelta;
                 return localPoint - (background.rectTransform.anchorMax * rectTransform.sizeDelta) + pivotOffset;
