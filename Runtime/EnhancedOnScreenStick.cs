@@ -118,7 +118,7 @@ namespace EnhancedOnScreenControls
                         UpdateAlpha();
                     }
                 }
-                else if (_delay > 0f)
+                else if (_delay > 0f && _alpha >= 1f)
                 {
                     _delay -= deltaTime;
                 }
