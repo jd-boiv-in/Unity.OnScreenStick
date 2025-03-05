@@ -1,7 +1,7 @@
 # Enhanced On-Screen Stick
  Provides an advanced virtual joystick compatible with Unity Input System/uGUI.
 
-<img src="https://github.com/AnnulusGames/EnhancedOnScreenStick/blob/main/docs/images/header.png" width="800">
+<img src="https://github.com/starburst997/Unity.OnScreenStick/blob/main/Documentation~/images/header.png" width="800">
 
 [![license](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
 ![unity-version](https://img.shields.io/badge/unity-2020.1+-000.svg)
@@ -33,7 +33,7 @@ Alternatively, open Packages/manifest.json and add the following to the dependen
 ```json
 {
     "dependencies": {
-        "com.annulusgames.enhanced-on-screen-stick": "https://github.com/AnnulusGames/EnhancedOnScreenStick.git?path=Assets/EnhancedOnScreenStick"
+        "com.annulusgames.enhanced-on-screen-stick": "https://github.com/starburst997/Unity.OnScreenStick.git"
     }
 }
 ```
@@ -42,15 +42,15 @@ Alternatively, open Packages/manifest.json and add the following to the dependen
 
 By integrating Enhanced On-Screen Stick, you can create a virtual stick from `Create > Enhanced On-Screen Controls > On-Screen Stick`.
 
-<img src="https://github.com/AnnulusGames/EnhancedOnScreenStick/blob/main/docs/images/img-create-menu.png" width="500">
+<img src="https://github.com/starburst997/Unity.OnScreenStick/blob/main/Documentation~/images/img-create-menu.png" width="500">
 
 Once created, place it on the Canvas and adjust its size and appearance. The RectTransform range of the object with the attached components will become the operable area.
 
-<img src="https://github.com/AnnulusGames/EnhancedOnScreenStick/blob/main/docs/images/img-scene-view.png" width="600">
+<img src="https://github.com/starburst997/Unity.OnScreenStick/blob/main/Documentation~/images/img-scene-view.png" width="600">
 
 Next, set the Control Path from the Inspector. This allows you to simulate input from any device.
 
-<img src="https://github.com/AnnulusGames/EnhancedOnScreenStick/blob/main/docs/images/img-inspector.png" width="600">
+<img src="https://github.com/starburst997/Unity.OnScreenStick/blob/main/Documentation~/images/img-inspector.png" width="600">
 
 Setup is now complete. You can process input using the Input System as usual. Below is a sample of using Enhanced On-Screen Stick and InputAction for movement processing.
 
@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
 }
 ```
 
-<img src="https://github.com/AnnulusGames/EnhancedOnScreenStick/blob/main/docs/images/img-sample-1.gif" width="800">
+<img src="https://github.com/starburst997/Unity.OnScreenStick/blob/main/Documentation~/images/img-sample-1.gif" width="800">
 
 ## Customization
 
