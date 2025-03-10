@@ -1,5 +1,5 @@
 {
-    "name": "EnhancedOnScreenStick.Editor",
+    "name": "JD.OnScreenStick.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:5ffc2b5d3dc3443c9bc5fcb7b94a9524"
