@@ -1,10 +1,15 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.OnScreen;
+#elif REWIRED
+using Rewired;
+#endif
 
 namespace EnhancedOnScreenControls
 {
@@ -24,13 +29,26 @@ namespace EnhancedOnScreenControls
 
     [AddComponentMenu("Input/Enhanced On-Screen Stick")]
     [RequireComponent(typeof(RectTransform))]
-    public class EnhancedOnScreenStick : OnScreenControl, IPointerDownHandler, IPointerUpHandler, IDragHandler
+    public class EnhancedOnScreenStick : 
+#if ENABLE_INPUT_SYSTEM
+        OnScreenControl, 
+#else
+        MonoBehaviour,
+#endif
+        IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
+#if ENABLE_INPUT_SYSTEM
         [InputControl(layout = "Vector2")]
-        [FormerlySerializedAs("controlPath")]
         [SerializeField]
         string internalControlPath;
 
+        protected override string controlPathInternal
+        {
+            get => internalControlPath;
+            set => internalControlPath = value;
+        }
+#endif
+        
         [SerializeField] StickType stickType;
         [SerializeField] AxisOptions axisOptions = AxisOptions.Both;
         [SerializeField] float movementRange = 50f;
@@ -39,12 +57,6 @@ namespace EnhancedOnScreenControls
 
         [SerializeField] Image background;
         [SerializeField] Image handle;
-
-        protected override string controlPathInternal
-        {
-            get => internalControlPath;
-            set => internalControlPath = value;
-        }
 
         public StickType StickType
         {
@@ -79,6 +91,7 @@ namespace EnhancedOnScreenControls
 
         private Camera _camera;
         private Vector2 _desiredHandle;
+        private Vector2 _input;
         
         protected void Awake()
         {
@@ -97,6 +110,38 @@ namespace EnhancedOnScreenControls
                 }
             }
         }
+
+#if REWIRED
+        public string AxisHorizontal = "Horizontal";
+        public string AxisVertical = "Vertical";
+        public int AxisHorizontalId = -1;
+        public int AxisVerticalId = -1;
+        
+        private CustomController _controller;
+        private void OnEnable()
+        {
+            // Assume we have only one custom controller for touch input
+            if (ReInput.controllers.customControllerCount == 0) return;
+            
+            var controllers = ReInput.controllers.CustomControllers;
+            _controller = controllers[0];
+            ReInput.InputSourceUpdateEvent += OnInputSourceUpdate;
+        }
+        
+        private void OnDisable()
+        {
+            ReInput.InputSourceUpdateEvent -= OnInputSourceUpdate;
+        }
+
+        private void OnInputSourceUpdate()
+        {
+            if (AxisHorizontalId >= 0) _controller.SetAxisValue(AxisHorizontalId, _input.x);
+            else _controller.SetAxisValue(AxisHorizontal, _input.x);
+            
+            if (AxisVerticalId >= 0) _controller.SetAxisValue(AxisVerticalId, _input.y);
+            else _controller.SetAxisValue(AxisVertical, _input.y);
+        }
+#endif
 
         private void UpdateAlpha()
         {
@@ -169,7 +214,10 @@ namespace EnhancedOnScreenControls
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            _input = Vector2.zero;
+#if ENABLE_INPUT_SYSTEM
             SentDefaultValueToControl();
+#endif
 
             _desiredHandle = Vector2.zero;
 
@@ -189,9 +237,12 @@ namespace EnhancedOnScreenControls
             var normalized = input.normalized;
 
             if (rawMagnitude < deadZone) input = Vector2.zero;
-            else if (rawMagnitude > 1f) input = input.normalized;
-
+            else if (rawMagnitude > 1f) input = normalized;
+            
+            _input = input;
+#if ENABLE_INPUT_SYSTEM
             SendValueToControl(input);
+#endif
 
             if (stickType == StickType.Dynamic && rawMagnitude > 1f)
             {

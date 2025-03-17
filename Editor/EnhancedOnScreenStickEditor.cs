@@ -38,6 +38,14 @@ namespace EnhancedOnScreenControls.Editor
             AddPropertyField(root, "background");
             AddPropertyField(root, "handle");
 
+#if REWIRED
+            AddSpace(root, 6f);
+            AddPropertyField(root, "AxisHorizontal");
+            AddPropertyField(root, "AxisVertical");
+            AddPropertyField(root, "AxisHorizontalId");
+            AddPropertyField(root, "AxisVerticalId");
+#endif
+            
             return root;
         }
 
